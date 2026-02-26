@@ -27,7 +27,7 @@ int main() {
 
     fp = fopen("memo.txt", "w");
     if (fp == NULL) {
-        printf("Don't open file.");
+        printf("Fail open file.");
         return 1;
     }
 
