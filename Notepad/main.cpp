@@ -14,7 +14,7 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 int WINAPI _tWinMain(HINSTANCE hInstance,
     HINSTANCE hPrevInstance,
-    LPSTR lpCmdLine,
+    LPTSTR lpCmdLine,
     int nCmdShow) {
 
     static TCHAR szWindowClass[] = _T("Sample");
@@ -40,8 +40,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance,
         MessageBox(NULL,
             _T("Failed to register window class."),
             _T("Sample"),
-            NULL
-            );
+            MB_OK);
 
         return -1;
     }
@@ -64,7 +63,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance,
         MessageBox(NULL,
             _T("Failed to create window."),
             _T("Sample"),
-            NULL);
+            MB_OK);
         return -1;
     }
 
@@ -80,14 +79,22 @@ int WINAPI _tWinMain(HINSTANCE hInstance,
     return (int)msg.wParam;
 }
 
-LRESULT CALLBACK WndProc(HWND hWnd,UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    PAINTSTRUCT ps;
+    HDC hdc;
+    TCHAR greeting[] = _T("Hello world");
     switch (message)
     {
-    case WM_DESTROY:
+        case WM_PAINT:
+            hdc = BeginPaint(hWnd, &ps);
+            TextOut(hdc, 5, 5, greeting, _tcslen(greeting));
+            EndPaint(hWnd, &ps);
+            break;
+        case WM_DESTROY:
             PostQuitMessage(0);
             break;
-    default:
+        default:
             return DefWindowProc(hWnd, message, wParam, lParam);
             break;
     }
